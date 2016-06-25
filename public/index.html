@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Polo Bot</title>
+        
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        
+        <style type="text/css">
+            
+            .text-overflow {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 500px;
+            }
+            
+            .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+                background-color: #04b300;
+                color:#eeeeee;
+            }
+            
+        </style>
+      
+    </head>
+
+    <body>
+        
+        <div class="navbar navbar-inverse">
+            <div class="container">
+                
+                <div class="navbar-header">
+                    <a href="" class="navbar-brand">Polo Bot</a>
+                    
+<!--
+                    <button class="navbar-toggle" data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+-->
+                    
+                </div>
+                
+<!--
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav"> Navbar buttons 
+                        <li class="active"><a href="">Page 1</a></li>
+                        <li><a href="">Page 2</a></li>
+                        <li><a href="">Page 3</a></li>
+                    </ul>
+                </div>
+-->
+            </div>
+        </div>
+        
+        
+        <div class="container">
+
+            <div id="transactions" class="table-responsive">        
+                <table id="transTable" class="table table-striped table-bordered">            
+                    <tr><th>#</th><th>Amount</th><th>Type</th><th>Price ($)</th><th>Total ($)</th><th>Date</th></tr>
+                    <tbody id="track-list"></tbody>
+                </table>
+
+            </div>
+        
+        </div>
+
+        <script type="text/javascript" src="code.js"></script> <!--Must be below HTML-->
+        
+</html>

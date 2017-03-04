@@ -27,13 +27,63 @@ console.log("listening on 8888");
 
 // Generate headers signed by this user's key and secret.
 poloniex = new Poloniex(keys.polo.key, keys.polo.secret);
-checkPrice();
 
+// doesn't include balances on orders
+poloniex.myBalances(function(err, data) {
+    console.log("...checking my balances");
+    if (err) {
+        console.log('ERROR', err);
+        return;
+    }
+    var num_eth = parseFloat(data.ETH);
+    var num_usdt = parseFloat(data.USDT);
+    console.log("   " + num_eth + " eth");
+    console.log("   " + num_usdt + " usdt");
+    tick();
+
+});
+
+
+
+// TODO: find poloniex API rate limit
+// checks all necessary conditions once and place a buy or sell order if appropriate
+function tick() {
+    console.log("\n\n-------- tick --------");
+    poloniex.myOpenOrders("USDT", "ETH", function(err, data) {
+        console.log("...checking my open orders");
+        if (err) {
+            console.log('ERROR', err);
+            return;
+        }
+
+        if (data.length > 0) {
+            console.log(data);
+            console.log("   there are " + data.length + " open orders");
+            return;
+        }
+        console.log("   there are NO open orders");
+
+
+        // when there are no open orders
+        if (buying) {
+            // place buy order
+            placeBuyOrder();
+
+        }
+
+        else { // if selling
+            // place sell order
+            placeSellOrder();
+
+        }
+
+
+    });
+}
 
 
 function checkPrice() {
     console.log("checkPrice() called");
-
     poloniex.getTicker(function(err, data) {
         if (err) {
             console.log('ERROR', err);
@@ -45,19 +95,19 @@ function checkPrice() {
         var eth_price = -1
 
         if (buying)
-            eth_price = data.USDT_ETH.lowestAsk
+            eth_price = parseFloat(data.USDT_ETH.lowestAsk)
         else
-            eth_price = data.USDT_ETH.highestBid
+            eth_price = parseFloat(data.USDT_ETH.highestBid)
 
     });
 }
 
 
 function placeBuyOrder() {
-    console.log("placing buy order ");
+    console.log("*** PLACING BUY ORDER ***");
 }
 
 function placeSellOrder() {
-    console.log("placing sell order ");
+    console.log("*** PLACING SELL ORDER ***");
 }
 

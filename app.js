@@ -14,10 +14,10 @@ var app = express();
 var Poloniex = require('./poloniex.js');
 var args = process.argv.slice(2);
 
-const mid = 18.75
-const sell_price = mid + 0.1  // price to sell ETH at
-const buy_price = mid - 0.1   // price to buy ETH at
-const quantity = 0.0099        // later consider using the max amount each time (include cumulative profits)
+const mid = 19.00
+const sell_price = mid + 0.10 // price to sell ETH at
+const buy_price = mid - 0.10  // price to buy ETH at
+const quantity = 0.989        // later consider using the max amount each time (include cumulative profits)
 
 var ready = 1                 // indicate that no API requests are still being made
 var count = 0;                // number of times the loop has run
@@ -51,8 +51,9 @@ console.log("listening on 8888");
 // (doesn't include balances on orders)
 poloniex.myBalances(function(err, data) {
     console.log("...checking my balances");
-    if (err) {
+    if (err || data.error) {
         console.log('ERROR', err);
+        console.log(data);
         return;
     }
     var num_eth = parseFloat(data.ETH);
@@ -95,9 +96,9 @@ function tick() {
     }
 
     poloniex.myOpenOrders("USDT", "ETH", function(err, data) {
-        if (err) {
+        if (err || data.error) {
             console.log('ERROR', err);
-            ready = 1;
+            console.log(data);
             return;
         }
 
@@ -106,7 +107,7 @@ function tick() {
             console.log(data);
         }
 
-        if (data.length > 2) {
+        if (data.length > 0) {
             ready = 1; // important
             return;
         }
@@ -130,8 +131,9 @@ function tick() {
 function checkPrice() {
     console.log("checkPrice() called");
     poloniex.getTicker(function(err, data) {
-        if (err) {
+        if (err || data.error) {
             console.log('ERROR', err);
+            console.log(data);
             return;
         }
 
@@ -159,8 +161,9 @@ function placeBuyOrder() {
     poloniex.buy("USDT", "ETH", buy_price, quantity, function(err, data) {
 		buying = 0;
 		ready = 1;
-        if (err) {
+        if (err || data.error) {
             console.log('ERROR', err);
+            console.log(data);
             return;
         }
         console.log("   buy order placed");
@@ -179,8 +182,9 @@ function placeSellOrder() {
     poloniex.sell("USDT", "ETH", sell_price, quantity, function(err, data) {
 		buying = 1;
 		ready = 1;
-        if (err) {
+        if (err || data.error) {
             console.log('ERROR', err);
+            console.log(data);
             return;
         }
         console.log("   sell order placed");

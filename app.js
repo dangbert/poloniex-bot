@@ -3,6 +3,9 @@
 * Max 6 calls/sec, don't repeatedly and needlessly fetch excessive amounts of data.
 */
 
+//TODO: make bot look for price differences and capatilize on them
+// e.g. if ETH/USDT -> $17.98 and ETH/BTC -> BTC/USDT -> $18.40
+
 // http://www.tgreenidge.com/blog/hide-api-keys/
 var keys = require('./api_keys'); // contains json object called module.exports
 
@@ -14,7 +17,7 @@ var app = express();
 var Poloniex = require('./poloniex.js');
 var args = process.argv.slice(2);
 
-const mid = 19.00
+const mid = 18.95
 const sell_price = mid + 0.10 // price to sell ETH at
 const buy_price = mid - 0.10  // price to buy ETH at
 const quantity = 0.989        // later consider using the max amount each time (include cumulative profits)

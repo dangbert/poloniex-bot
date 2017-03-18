@@ -17,27 +17,32 @@ var app = express();
 var Poloniex = require('./poloniex.js');
 var args = process.argv.slice(2);
 
-const mid = 18.95
-const sell_price = mid + 0.10 // price to sell ETH at
-const buy_price = mid - 0.10  // price to buy ETH at
-const quantity = 0.989        // later consider using the max amount each time (include cumulative profits)
+const mid = parseFloat(args[1])
+const diff = parseFloat(args[2])
+const sell_price = mid + diff // price to sell ETH at
+const buy_price = mid - diff  // price to buy ETH at
+const quantity = 0.98         // later consider using the max amount each time (include cumulative profits)
 
 var ready = 1                 // indicate that no API requests are still being made
 var count = 0;                // number of times the loop has run
 var numOrders = 0;            // number of orders made
 var buying = 0                // 1 if the current goal is to buy Eth, 0 if the goal is to sell
 
-if (args[0] == "BUY") { 
-    buying = 1;
-}
-else if (args[0] == "SELL") { 
-    buying = 0;
-}
-else {
-    console.log("valid command line arg required");
+if (args.length != 3) {
+    console.log("3 command line args required");
     return;
 }
+if ((args[0] != "SELL" && args[0] != "BUY") || isNaN(mid) || isNaN(diff)) {
+    console.log("valid command line args required");
+    return;
+}
+
+if (args[0] == "BUY") {
+    buying = 1;
+}
+
 console.log("initialized buying = " + buying);
+console.log(buy_price + " to " + sell_price);
 
 
 app.use(express.static(__dirname + '/public'))

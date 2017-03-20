@@ -17,11 +17,10 @@ var app = express();
 var Poloniex = require('./poloniex.js');
 var args = process.argv.slice(2);
 
-const mid = parseFloat(args[1])
-const diff = parseFloat(args[2])
-const sell_price = mid + diff // price to sell ETH at
-const buy_price = mid - diff  // price to buy ETH at
-const quantity = 0.98         // later consider using the max amount each time (include cumulative profits)
+var buy_price = parseFloat(args[1])   // price to buy ETH at
+var sell_price = parseFloat(args[2]) // price to sell ETH at
+const quantity = 0.97         // later consider using the max amount each time (include cumulative profits)
+var inc = 0
 
 var ready = 1                 // indicate that no API requests are still being made
 var count = 0;                // number of times the loop has run
@@ -32,7 +31,7 @@ if (args.length != 3) {
     console.log("3 command line args required");
     return;
 }
-if ((args[0] != "SELL" && args[0] != "BUY") || isNaN(mid) || isNaN(diff)) {
+if ((args[0] != "SELL" && args[0] != "BUY") || isNaN(buy_price) || isNaN(sell_price) || buy_price >= sell_price) {
     console.log("valid command line args required");
     return;
 }
@@ -82,7 +81,7 @@ function startLoop() {
             tick();
 		}
 
-		if (numOrders >= 8) {
+		if (numOrders >= 20) {
 			console.log("stopping after " + numOrders + " orders");
 			clearInterval(loop);
 		}
@@ -120,11 +119,13 @@ function tick() {
             return;
         }
         // when there are no open orders, make a new order
-        console.log("...there are ONLY " + data.length + " open orders");
+        console.log("...now there are " + data.length + " open orders");
 
-
+        // TODO: handle if there's an error when buying/selling
         if (buying) {
             placeBuyOrder(); // place ETH buy order
+            buy_price += inc
+            sell_price += inc
         }
 
         // if selling is the goal
@@ -174,7 +175,7 @@ function placeBuyOrder() {
             console.log(data);
             return;
         }
-        console.log("   buy order placed");
+        console.log("   buy order placed at " + buy_price);
         console.log(data);
     });
 }
@@ -195,7 +196,7 @@ function placeSellOrder() {
             console.log(data);
             return;
         }
-        console.log("   sell order placed");
+        console.log("   sell order placed at " + sell_price);
         console.log(data);
     });
 }

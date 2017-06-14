@@ -1,10 +1,11 @@
 Right now the code only buys/sells between ETH and USDT.
+
 I make no guarantees about the behavior of the code but it has worked fine for me so far.
 
 If you want to run the code (note this will make trades for you on poloniex):
 
 * install node js
-* create a ploniex account and generate API keys there
+* create a poloniex.com account and generate API keys there
 * rename sample_api_keys.js to api_keys.js and place your API keys in there
 * "const quantity" in app.js is the amount of ETH to buy/sell and you have to manually change that before running app.js
 * Start the bot:

@@ -10,6 +10,7 @@ If you want to run the code (note this will make trades for you on poloniex):
 * "const quantity" in app.js is the amount of ETH to buy/sell and you have to manually change that before running app.js
 * Start the bot:
   * node app.js <buy_price> <sell_price> <initial_mode>
+  * the intial mode specifies whether to start by placing an ETH SELL order or BUY order
   * examples:
     * node app.js 367 390 SELL
     * node app.js 367 390 BUY

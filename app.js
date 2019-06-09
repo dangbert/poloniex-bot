@@ -17,10 +17,10 @@ var app = express();
 var Poloniex = require('./poloniex.js');
 var args = process.argv.slice(2);
 
-var buy_price = parseFloat(args[1])   // price to buy ETH at
-var sell_price = parseFloat(args[2]) // price to sell ETH at
-const quantity = 0.97         // later consider using the max amount each time (include cumulative profits)
-var inc = 0
+var buy_price = parseFloat(args[1]);   // price to buy ETH at
+var sell_price = parseFloat(args[2]); // price to sell ETH at
+const quantity = 1.00;        // later consider using the max amount each time (include cumulative profits)
+var inc = 0;
 
 var ready = 1                 // indicate that no API requests are still being made
 var count = 0;                // number of times the loop has run
@@ -40,6 +40,8 @@ if (args[0] == "BUY") {
     buying = 1;
 }
 
+
+printTime();
 console.log("initialized buying = " + buying);
 console.log(buy_price + " to " + sell_price);
 
@@ -95,8 +97,9 @@ function startLoop() {
 // checks all necessary conditions once and place a buy or sell order if appropriate
 function tick() {
 	ready = 0;
-    if (count % 20 == 0 || count == 1) {
+    if (count % (30*4) == 0 || count == 1) {
         console.log("\n\n-------- tick --------");
+        printTime();
         console.log("buying = " + buying);
         console.log("looped:\t" + count + " times");
         console.log("orders made:\t" + numOrders);
@@ -199,4 +202,12 @@ function placeSellOrder() {
         console.log("   sell order placed at " + sell_price);
         console.log(data);
     });
+}
+
+
+function printTime() {
+    var stamp = new Date();
+    stamp.setTime(stamp.getTime() - 4 * (1000 * 60 * 60));
+    ds = stamp.toString();
+    console.log(ds.substring(0, ds.indexOf(" GMT")));
 }
